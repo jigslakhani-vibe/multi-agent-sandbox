@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multi-Agent Simulator & Visualizer</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="glow-container">
+    <div class="glow-spot spot-1"></div>
+    <div class="glow-spot spot-2"></div>
+  </div>
+
+  <div class="app-container">
+    <header class="app-header">
+      <div class="logo-area">
+        <span class="logo-icon">🤖🔗🤖</span>
+        <div>
+          <h1>Antigravity Multi-Agent Sandbox</h1>
+          <p class="subtitle">Simulate, trace, and evaluate collaborative agent ecosystems</p>
+        </div>
+      </div>
+      <div class="status-indicator" id="simulationStatus">
+        <span class="status-dot"></span> <span class="status-text">Idle</span>
+      </div>
+    </header>
+
+    <div class="layout-grid">
+      <!-- Left Column: Controls & Agent Configurations -->
+      <aside class="sidebar">
+        <section class="glass-card panel">
+          <h2>1. Setup Simulation</h2>
+          <div class="form-group">
+            <label for="workflowSelector">Workflow Pipeline</label>
+            <select id="workflowSelector">
+              <option value="creative">Creative Content Team</option>
+              <option value="software">Software Development Pipeline</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="userInput">User Input Request</label>
+            <textarea id="userInput" placeholder="Enter topic or feature request...">Space Tourism in 2030</textarea>
+          </div>
+          <div class="controls-row">
+            <button id="runBtn" class="btn primary-btn">▶ Run Flow</button>
+            <button id="pauseBtn" class="btn secondary-btn" disabled>⏸ Pause</button>
+            <button id="stepBtn" class="btn secondary-btn" disabled>⏭ Step Next</button>
+            <button id="resetBtn" class="btn tertiary-btn">🔄 Reset</button>
+          </div>
+        </section>
+
+        <section class="glass-card panel agent-configs-panel">
+          <h2>2. Active Agents Registry</h2>
+          <p class="section-desc">Inspect & customize agent system prompts:</p>
+          <div id="agentConfigList" class="agent-config-list">
+            <!-- Dynamic elements go here -->
+          </div>
+        </section>
+      </aside>
+
+      <!-- Center & Right: Visual Trace & Logs -->
+      <main class="main-content">
+        <!-- Visual Trace Graph -->
+        <section class="glass-card panel visualizer-panel">
+          <div class="panel-header">
+            <h2>Workflow Graph & Call Flow</h2>
+            <div class="legend">
+              <span class="legend-item"><span class="dot active"></span> Active</span>
+              <span class="legend-item"><span class="dot completed"></span> Completed</span>
+            </div>
+          </div>
+          <div class="visualizer-canvas" id="visualizerCanvas">
+            <!-- Dynamic nodes rendering here -->
+          </div>
+        </section>
+
+        <!-- Dynamic Logs and Evaluations Tabs -->
+        <section class="glass-card panel results-panel">
+          <div class="tabs-header">
+            <button class="tab-btn active" data-tab="logsTab">Trace Logs</button>
+            <button class="tab-btn" data-tab="evalsTab">Evaluations & Metrics</button>
+          </div>
+          
+          <div class="tab-content active" id="logsTab">
+            <div class="logs-scroller" id="logsContainer">
+              <div class="placeholder-text">Logs will update in real time as the simulation runs.</div>
+            </div>
+          </div>
+
+          <div class="tab-content" id="evalsTab">
+            <div id="evalReportContainer" class="eval-report-container">
+              <div class="placeholder-text">Evaluator metrics will render here after the workflow completes.</div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- Detail Dialog / Modal for Inspecting JSON Payloads -->
+  <div class="modal-overlay" id="payloadModal">
+    <div class="glass-card modal-content">
+      <div class="modal-header">
+        <h3 id="modalTitle">Payload Details</h3>
+        <button class="close-btn" id="modalClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <pre><code id="modalJson" class="language-json"></code></pre>
+      </div>
+    </div>
+  </div>
+
+  <script src="agents.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
