@@ -274,6 +274,7 @@ While integration requires strict quality gates, the benefits are undeniable. It
     await this.delay();
 
     const evalReport = {
+      finalOutput: draft,
       metrics: {
         alignment: 95, // %
         completeness: 90,
@@ -286,6 +287,12 @@ While integration requires strict quality gates, the benefits are undeniable. It
         suggestions: [
           "To optimize latency, the Writer could run in parallel with researcher outline queries.",
           "Add a validation layer directly on the Writer to reduce editor loop cycles."
+        ],
+        agentPerformance: [
+          { name: "Planner", score: 98, feedback: "Excellent outlining, well-structured sections." },
+          { name: "Researcher", score: 92, feedback: "Gathered solid facts, but could include more citations." },
+          { name: "Writer", score: 85, feedback: "Initial draft was too formal; required editor rework." },
+          { name: "Editor", score: 95, feedback: "Caught the tone issue effectively and guided the writer." }
         ]
       }
     };
@@ -406,6 +413,7 @@ function handleFeature(input) {
     await this.delay();
 
     const evalReport = {
+      finalOutput: codeResult,
       metrics: {
         alignment: 100, // %
         completeness: 95,
@@ -418,6 +426,11 @@ function handleFeature(input) {
         suggestions: [
           "Implement lint checks before sending to QA to capture styling anomalies.",
           "Add static type verification configurations."
+        ],
+        agentPerformance: [
+          { name: "Product Manager", score: 96, feedback: "Clear spec with good test scenarios." },
+          { name: "Developer", score: 82, feedback: "Introduced a bug in error handling; fixed promptly after QA." },
+          { name: "QA Tester", score: 98, feedback: "Identified the exact edge-case failure effectively." }
         ]
       }
     };

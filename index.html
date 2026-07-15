@@ -83,6 +83,7 @@
           <div class="tabs-header">
             <button class="tab-btn active" data-tab="logsTab">Trace Logs</button>
             <button class="tab-btn" data-tab="evalsTab">Evaluations & Metrics</button>
+            <button class="tab-btn" data-tab="outputTab">Final Output</button>
           </div>
           
           <div class="tab-content active" id="logsTab">
@@ -94,6 +95,19 @@
           <div class="tab-content" id="evalsTab">
             <div id="evalReportContainer" class="eval-report-container">
               <div class="placeholder-text">Evaluator metrics will render here after the workflow completes.</div>
+            </div>
+            <div class="eval-explanation" style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+              <h4>About these Metrics</h4>
+              <p style="margin-bottom: 8px; font-size: 0.9em; line-height: 1.4;"><strong>Alignment:</strong> Measures how closely the final output matches the initial user request and constraints.</p>
+              <p style="margin-bottom: 8px; font-size: 0.9em; line-height: 1.4;"><strong>Completeness:</strong> Evaluates if all requested features or facts were included.</p>
+              <p style="margin-bottom: 8px; font-size: 0.9em; line-height: 1.4;"><strong>Efficiency:</strong> Tracks the number of feedback loops. Fewer loops mean higher efficiency (e.g., if QA or Editor requests rework, efficiency drops).</p>
+              <p style="margin-bottom: 0; font-size: 0.9em; line-height: 1.4;"><strong>Readability:</strong> A heuristic score of the final code or text structure.</p>
+            </div>
+          </div>
+
+          <div class="tab-content" id="outputTab">
+            <div id="outputContainer" class="output-container" style="padding: 15px; overflow-y: auto; max-height: 500px;">
+              <div class="placeholder-text">Final output will appear here after execution.</div>
             </div>
           </div>
         </section>

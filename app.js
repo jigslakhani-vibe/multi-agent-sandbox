@@ -332,6 +332,23 @@ function renderEvaluations(report) {
         ${report.evaluation.suggestions.map(s => `<li>${s}</li>`).join("")}
       </ul>
     </div>
+
+    ${report.evaluation.agentPerformance ? `
+    <div class="eval-agent-performance-card" style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+      <h4 style="margin-bottom: 15px; margin-top: 0; color: var(--accent-blue);">🤖 Agent Performance Breakdown</h4>
+      <ul style="list-style: none; padding: 0; margin: 0;">
+        ${report.evaluation.agentPerformance.map(agent => `
+          <li style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+              <strong style="font-size: 1.05em;">${agent.name} Agent</strong>
+              <span style="color: ${agent.score >= 95 ? 'var(--accent-green)' : (agent.score >= 85 ? 'var(--accent-orange)' : 'var(--accent-red)')}; font-weight: bold;">Score: ${agent.score}/100</span>
+            </div>
+            <div style="font-size: 0.9em; color: var(--text-secondary); line-height: 1.4;">${agent.feedback}</div>
+          </li>
+        `).join("")}
+      </ul>
+    </div>
+    ` : ''}
   `;
 }
 
@@ -346,6 +363,8 @@ function startSimulation() {
   // Clear previous outputs
   logsContainer.innerHTML = '<div class="placeholder-text">Initializing pipeline...</div>';
   evalReportContainer.innerHTML = '<div class="placeholder-text">Awaiting evaluation report...</div>';
+  const outputContainer = document.getElementById("outputContainer");
+  if (outputContainer) outputContainer.innerHTML = '<div class="placeholder-text">Final output will appear here after execution.</div>';
   runHistory = [];
   
   // Clear completed node glows
@@ -363,6 +382,7 @@ function startSimulation() {
     },
     onEval: (evalReport) => {
       renderEvaluations(evalReport);
+      if (typeof renderFinalOutput === 'function') renderFinalOutput(evalReport.finalOutput);
     },
     onFinish: () => {
       setStatus("idle");
@@ -408,6 +428,8 @@ resetBtn.addEventListener("click", () => {
   currentSim = null;
   logsContainer.innerHTML = '<div class="placeholder-text">Logs will update in real time as the simulation runs.</div>';
   evalReportContainer.innerHTML = '<div class="placeholder-text">Evaluator metrics will render here after the workflow completes.</div>';
+  const outputContainer = document.getElementById("outputContainer");
+  if (outputContainer) outputContainer.innerHTML = '<div class="placeholder-text">Final output will appear here after execution.</div>';
   setStatus("idle");
   renderVisualizerNodes();
 });
@@ -437,6 +459,37 @@ window.addEventListener("resize", () => {
   const workflow = WORKFLOWS[activeWorkflow];
   drawConnectionPaths(Object.values(workflow.agents));
 });
+
+// Render Final Output dynamically
+function renderFinalOutput(finalOutput) {
+  const outputContainer = document.getElementById("outputContainer");
+  if (!outputContainer) return;
+  if (!finalOutput) {
+    outputContainer.innerHTML = '<div class="placeholder-text">No final output generated.</div>';
+    return;
+  }
+  
+  if (finalOutput.code) {
+    outputContainer.innerHTML = `
+      <div class="glass-card" style="padding: 20px;">
+        <h3 style="margin-top: 0;">Final Code Implementation</h3>
+        <pre style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; overflow-x: auto; font-family: monospace; font-size: 14px;"><code class="language-${finalOutput.language || 'javascript'}">${finalOutput.code.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</code></pre>
+      </div>
+    `;
+  } else if (finalOutput.content) {
+    const formattedContent = finalOutput.content.replace(/\\n/g, "<br>").replace(/## /g, "<h3>").replace(/# /g, "<h2>").replace(/\\*\\*(.*?)\\*\\*/g, "<strong>$1</strong>");
+    outputContainer.innerHTML = `
+      <div class="glass-card" style="padding: 20px;">
+        <h3 style="margin-top: 0; color: var(--accent-blue);">${finalOutput.title || 'Final Draft'}</h3>
+        <div style="line-height: 1.6; margin-bottom: 15px; font-size: 15px;">${formattedContent}</div>
+        <div style="display: flex; gap: 15px; font-size: 0.85em; color: var(--text-secondary); border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
+          <span><strong>Word Count:</strong> ${finalOutput.wordCount || 0}</span>
+          <span><strong>Tone:</strong> ${finalOutput.tone || 'N/A'}</span>
+        </div>
+      </div>
+    `;
+  }
+}
 
 // Initialize on Load
 renderAgentRegistry();
